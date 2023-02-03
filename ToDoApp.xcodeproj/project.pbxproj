@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		20644C2A298C90E60047EB2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20644C29298C90E60047EB2F /* AppDelegate.swift */; };
 		20644C2C298C90E60047EB2F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20644C2B298C90E60047EB2F /* SceneDelegate.swift */; };
-		20644C2E298C90E60047EB2F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20644C2D298C90E60047EB2F /* ViewController.swift */; };
+		20644C2E298C90E60047EB2F /* ToDoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20644C2D298C90E60047EB2F /* ToDoListVC.swift */; };
 		20644C31298C90E60047EB2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20644C2F298C90E60047EB2F /* Main.storyboard */; };
 		20644C34298C90E60047EB2F /* ToDoApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 20644C32298C90E60047EB2F /* ToDoApp.xcdatamodeld */; };
 		20644C36298C90E70047EB2F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20644C35298C90E70047EB2F /* Assets.xcassets */; };
@@ -20,7 +20,7 @@
 		20644C26298C90E60047EB2F /* ToDoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		20644C29298C90E60047EB2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		20644C2B298C90E60047EB2F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		20644C2D298C90E60047EB2F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		20644C2D298C90E60047EB2F /* ToDoListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListVC.swift; sourceTree = "<group>"; };
 		20644C30298C90E60047EB2F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		20644C33298C90E60047EB2F /* ToDoApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ToDoApp.xcdatamodel; sourceTree = "<group>"; };
 		20644C35298C90E70047EB2F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -60,14 +60,38 @@
 			children = (
 				20644C29298C90E60047EB2F /* AppDelegate.swift */,
 				20644C2B298C90E60047EB2F /* SceneDelegate.swift */,
-				20644C2D298C90E60047EB2F /* ViewController.swift */,
-				20644C2F298C90E60047EB2F /* Main.storyboard */,
+				20644C42298C91160047EB2F /* Models */,
+				20644C40298C90F30047EB2F /* Views */,
+				20644C41298C910C0047EB2F /* Controllers */,
 				20644C35298C90E70047EB2F /* Assets.xcassets */,
 				20644C37298C90E70047EB2F /* LaunchScreen.storyboard */,
 				20644C3A298C90E70047EB2F /* Info.plist */,
 				20644C32298C90E60047EB2F /* ToDoApp.xcdatamodeld */,
 			);
 			path = ToDoApp;
+			sourceTree = "<group>";
+		};
+		20644C40298C90F30047EB2F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				20644C2F298C90E60047EB2F /* Main.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		20644C41298C910C0047EB2F /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				20644C2D298C90E60047EB2F /* ToDoListVC.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		20644C42298C91160047EB2F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,7 +165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				20644C2E298C90E60047EB2F /* ViewController.swift in Sources */,
+				20644C2E298C90E60047EB2F /* ToDoListVC.swift in Sources */,
 				20644C2A298C90E60047EB2F /* AppDelegate.swift in Sources */,
 				20644C2C298C90E60047EB2F /* SceneDelegate.swift in Sources */,
 				20644C34298C90E60047EB2F /* ToDoApp.xcdatamodeld in Sources */,
