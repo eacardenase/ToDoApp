@@ -11,15 +11,15 @@ class ToDoListVC: UITableViewController {
     
     let defaults = UserDefaults.standard
     var itemsArray = [
-        "Be an iOS expert",
-        "Read Fahrenheit 421",
-        "Find happyness"
+        ToDo(title: "Be an iOS expert", done: false),
+        ToDo(title: "Read Fahrenheit 421", done: true),
+        ToDo(title: "Find happyness", done: false),
     ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let items = defaults.array(forKey: "ToDoListArray") as? [String] {
+        if let items = defaults.array(forKey: "ToDoListArray") as? [ToDo] {
             itemsArray = items
         }
         
@@ -33,8 +33,12 @@ class ToDoListVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let todo = itemsArray[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
-        cell.textLabel?.text = itemsArray[indexPath.row]
+        
+        cell.textLabel?.text = todo.title
+        cell.accessoryType = todo.done ? .checkmark : .none
         
         return cell
     }
@@ -43,12 +47,10 @@ class ToDoListVC: UITableViewController {
 
         let cell = tableView.cellForRow(at: indexPath)
         
-        if cell?.accessoryType == .checkmark {
-            cell?.accessoryType = .none
-        } else {
-            cell?.accessoryType = .checkmark
-        }
+        let todo = itemsArray[indexPath.row]
+        todo.done = !todo.done
         
+        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -75,7 +77,9 @@ class ToDoListVC: UITableViewController {
             return
         }
         
-        itemsArray.insert(todo, at: 0)
+        let newTodo = ToDo(title: todo, done: false)
+        
+        itemsArray.insert(newTodo, at: 0)
         
         self.defaults.set(self.itemsArray, forKey: "ToDoListArray")
 
