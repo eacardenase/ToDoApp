@@ -9,6 +9,7 @@ import UIKit
 
 class ToDoListVC: UITableViewController {
     
+    let defaults = UserDefaults.standard
     var itemsArray = [
         "Be an iOS expert",
         "Read Fahrenheit 421",
@@ -18,7 +19,12 @@ class ToDoListVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let items = defaults.array(forKey: "ToDoListArray") as? [String] {
+            itemsArray = items
+        }
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToDo))
+        navigationItem.rightBarButtonItem?.tintColor = .white
         
     }
     
@@ -46,6 +52,8 @@ class ToDoListVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    //MARK - Add New Items
+    
     @objc func addToDo() {
         let ac = UIAlertController(title: "Add ToDo", message: nil, preferredStyle: .alert)
         ac.addTextField()
@@ -68,6 +76,8 @@ class ToDoListVC: UITableViewController {
         }
         
         itemsArray.insert(todo, at: 0)
+        
+        self.defaults.set(self.itemsArray, forKey: "ToDoListArray")
 
         let indexPath = IndexPath(row: 0, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
