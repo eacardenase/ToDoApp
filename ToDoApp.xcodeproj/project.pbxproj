@@ -43,6 +43,7 @@
 		20644C1D298C90E60047EB2F = {
 			isa = PBXGroup;
 			children = (
+				20644C43298C92840047EB2F /* README.md */,
 				20644C28298C90E60047EB2F /* ToDoApp */,
 				20644C27298C90E60047EB2F /* Products */,
 			);
@@ -68,7 +69,6 @@
 				20644C37298C90E70047EB2F /* LaunchScreen.storyboard */,
 				20644C3A298C90E70047EB2F /* Info.plist */,
 				20644C32298C90E60047EB2F /* ToDoApp.xcdatamodeld */,
-				20644C43298C92840047EB2F /* README.md */,
 			);
 			path = ToDoApp;
 			sourceTree = "<group>";
