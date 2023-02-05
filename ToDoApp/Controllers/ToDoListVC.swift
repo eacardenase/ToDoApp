@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoListVC: UITableViewController {
     
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("ToDos.plist")
-    var itemsArray = [ToDo]()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var todosArray = [ToDo]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,15 +21,18 @@ class ToDoListVC: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToDo))
         navigationItem.rightBarButtonItem?.tintColor = .white
         
+        let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        print(dataFilePath)
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemsArray.count
+        return todosArray.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let todo = itemsArray[indexPath.row]
+        let todo = todosArray[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
         cell.textLabel?.text = todo.title
@@ -39,8 +43,11 @@ class ToDoListVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let todo = itemsArray[indexPath.row]
-        todo.done = !todo.done
+        let todo = todosArray[indexPath.row]
+//        todo.done = !todo.done
+        
+        todosArray.remove(at: indexPath.row)
+        context.delete(todo)
         
         saveToDos()
         
@@ -73,40 +80,38 @@ class ToDoListVC: UITableViewController {
             return
         }
         
-        let newTodo = ToDo(title: todo, done: false)
+        let newTodo = ToDo(context: context)
+        newTodo.title = todo
+        newTodo.done = false
         
-        itemsArray.insert(newTodo, at: 0)
-        
+        todosArray.insert(newTodo, at: todosArray.count)
+//        todosArray.append(todo)
         saveToDos()
         
-        let indexPath = IndexPath(row: 0, section: 0)
+        let indexPath = IndexPath(row: todosArray.count - 1, section: 0)
         
         tableView.insertRows(at: [indexPath], with: .automatic)
         
     }
     
     func saveToDos() {
-        let encoder = PropertyListEncoder()
         
         do {
-            let data = try encoder.encode(itemsArray)
-            try data.write(to: dataFilePath!)
+            try context.save()
         } catch {
-            print("Error encoding ToDos array \(error)")
+            print("Error saving context: \(error)")
         }
     }
     
     func loadToDos() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            
-            do {
-                itemsArray = try decoder.decode([ToDo].self, from: data)
-            } catch {
-                print("Error decoding ToDos array \(error)")
-            }
-            
+        let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
+        
+        do {
+            todosArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context: \(error)")
         }
+        
     }
 
 }
