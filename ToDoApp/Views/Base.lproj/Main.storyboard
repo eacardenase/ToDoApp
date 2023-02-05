@@ -10,14 +10,22 @@
         <!--ToDo App-->
         <scene sceneID="C1B-6u-GHd">
             <objects>
-                <tableViewController id="KDh-vp-0ct" customClass="ToDoListVC" customModule="ToDoApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ToDoList" id="KDh-vp-0ct" customClass="ToDoListVC" customModule="ToDoApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="fqg-ad-TGx">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="804"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="Og7-h6-mEo">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="KDh-vp-0ct" id="2wU-xo-aqE"/>
+                            </connections>
+                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ToDoItemCell" id="AvC-WO-9ae">
-                                <rect key="frame" x="0.0" y="50" width="414" height="43.5"/>
+                                <rect key="frame" x="0.0" y="94" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AvC-WO-9ae" id="HTR-Mg-Ctf">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
@@ -34,7 +42,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NfS-ci-EvG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="853.62318840579712" y="-31.473214285714285"/>
+            <point key="canvasLocation" x="1733" y="-31"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sQh-xs-rTx">
@@ -66,12 +74,41 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="KDh-vp-0ct" kind="relationship" relationship="rootViewController" id="Qhu-Jd-OJX"/>
+                        <segue destination="Z7s-XX-KS6" kind="relationship" relationship="rootViewController" id="I7q-oN-3fU"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DdH-cy-2b7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-56.521739130434788" y="-31.473214285714285"/>
+        </scene>
+        <!--ToDo Categories-->
+        <scene sceneID="fKP-gP-hl5">
+            <objects>
+                <tableViewController id="Z7s-XX-KS6" customClass="CategoryVC" customModule="ToDoApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="FvF-Kf-X4H">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="804"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CategoryCell" id="bar-kb-KtB">
+                                <rect key="frame" x="0.0" y="50" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bar-kb-KtB" id="Sgt-4j-SQ9">
+                                    <rect key="frame" x="0.0" y="0.0" width="383.5" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Z7s-XX-KS6" id="60U-ON-mdi"/>
+                            <outlet property="delegate" destination="Z7s-XX-KS6" id="vE1-Cy-GXh"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="ToDo Categories" id="Gxv-kN-cxu"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BWo-EZ-Xin" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="852" y="-31"/>
         </scene>
     </scenes>
     <resources>

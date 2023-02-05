@@ -43,20 +43,20 @@ class ToDoListVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let index = IndexPath(row: indexPath.row, section: 0)
         let todo = todosArray[indexPath.row]
-//        todo.done = !todo.done
-        
-        todosArray.remove(at: indexPath.row)
-        context.delete(todo)
+        todo.done = !todo.done
+//        let index = IndexPath(row: indexPath.row, section: 0)
+//        todosArray.remove(at: indexPath.row)
+//        context.delete(todo)
+//        tableView.deleteRows(at: [index], with: .automatic)
         
         saveToDos()
         
-        tableView.deleteRows(at: [index], with: .automatic)
+        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    //MARK - Add New Items
+    //MARK: - Add New Items
     
     @objc func addToDo() {
         let ac = UIAlertController(title: "Add ToDo", message: nil, preferredStyle: .alert)
@@ -74,7 +74,7 @@ class ToDoListVC: UITableViewController {
         present(ac, animated: true)
     }
     
-    //MARK - Model Manipulation Methods
+    //MARK: - Model Manipulation Methods
     
     func submit(_ todo: String) {
         if todo.count < 3 {
@@ -104,8 +104,7 @@ class ToDoListVC: UITableViewController {
         }
     }
     
-    func loadToDos() {
-        let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
+    func loadToDos(with request: NSFetchRequest<ToDo> = ToDo.fetchRequest()) {
         
         do {
             todosArray = try context.fetch(request)
@@ -113,7 +112,33 @@ class ToDoListVC: UITableViewController {
             print("Error fetching data from context: \(error)")
         }
         
+        tableView.reloadData()
     }
 
 }
 
+//MARK: - UISearchBarDelegate
+
+extension ToDoListVC: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if searchBar.text!.isEmpty {
+            loadToDos()
+            
+            DispatchQueue.main.async {
+                [weak searchBar] in
+                
+                searchBar?.resignFirstResponder()
+            }
+            
+            return
+        }
+        
+        let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        loadToDos(with: request)
+    }
+}
