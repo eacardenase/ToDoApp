@@ -43,6 +43,7 @@ class ToDoListVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        let index = IndexPath(row: indexPath.row, section: 0)
         let todo = todosArray[indexPath.row]
 //        todo.done = !todo.done
         
@@ -51,7 +52,7 @@ class ToDoListVC: UITableViewController {
         
         saveToDos()
         
-        tableView.reloadData()
+        tableView.deleteRows(at: [index], with: .automatic)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
