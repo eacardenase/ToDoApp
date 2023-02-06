@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import SwipeCellKit
 
 class CategoryVC: UITableViewController {
     
@@ -29,6 +30,8 @@ class CategoryVC: UITableViewController {
         navigationItem.scrollEdgeAppearance = navigationBarAppearance
         
         loadCategories()
+        
+        tableView.rowHeight = 80.0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -38,8 +41,9 @@ class CategoryVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let category = categoriesArray?[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
         
+        cell.delegate = self
         cell.textLabel?.text = category?.name ?? "No Categories Added Yet"
         
         return cell
@@ -109,4 +113,36 @@ class CategoryVC: UITableViewController {
         tableView.reloadData()
     }
 
+}
+
+//MARK: - SwipeTableViewDelegate
+
+extension CategoryVC: SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            
+            if let category = self.categoriesArray?[indexPath.row] {
+                do {
+                    try self.realm.write {
+                        self.realm.delete(category)
+                    }
+                } catch {
+                    print("Error updating ToDo: \(error)")
+                }
+            }
+            
+            let index = IndexPath(row: indexPath.row, section: 0)
+            tableView.deleteRows(at: [index], with: .automatic)
+            
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+
+        deleteAction.image = UIImage(named: "delete")
+
+        return [deleteAction]
+    }
+    
+    
 }
