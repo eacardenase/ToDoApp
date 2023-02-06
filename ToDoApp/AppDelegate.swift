@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         
         do {
-            let realmConfig = Realm.Configuration(schemaVersion: 2)
+            let realmConfig = Realm.Configuration(schemaVersion: 3)
             Realm.Configuration.defaultConfiguration = realmConfig
             
             let realm = try Realm()

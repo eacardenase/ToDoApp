@@ -11,7 +11,7 @@ import RealmSwift
 class CategoryVC: UITableViewController {
     
     let realm = try! Realm()
-    var categoriesArray: [Category] = []
+    var categoriesArray: Results<Category>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,15 +32,15 @@ class CategoryVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoriesArray.count
+        return categoriesArray?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let category = categoriesArray[indexPath.row]
+        let category = categoriesArray?[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
         
-        cell.textLabel?.text = category.name
+        cell.textLabel?.text = category?.name ?? "No Categories Added Yet"
         
         return cell
     }
@@ -49,7 +49,7 @@ class CategoryVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "ToDoList") as? ToDoListVC {
-            let selectedCategory = categoriesArray[indexPath.row]
+            let selectedCategory = categoriesArray?[indexPath.row]
  
             vc.selectedCategory = selectedCategory
             
@@ -85,11 +85,9 @@ class CategoryVC: UITableViewController {
         let newCategory = Category()
         newCategory.name = category
         
-        categoriesArray.insert(newCategory, at: categoriesArray.count)
-        
         saveCategory(newCategory)
         
-        let indexPath = IndexPath(row: categoriesArray.count - 1, section: 0)
+        let indexPath = IndexPath(row: categoriesArray!.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
     }
     
@@ -101,12 +99,14 @@ class CategoryVC: UITableViewController {
                 realm.add(category)
             }
         } catch {
-            print("Error saving context: \(error)")
+            print("Error saving category: \(error)")
         }
     }
     
     func loadCategories() {
+        categoriesArray = realm.objects(Category.self)
         
+        tableView.reloadData()
     }
 
 }

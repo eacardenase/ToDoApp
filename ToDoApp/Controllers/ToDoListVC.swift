@@ -10,12 +10,13 @@ import RealmSwift
 
 class ToDoListVC: UITableViewController {
     
+    let realm = try! Realm()
     var selectedCategory: Category? {
         didSet {
-//            loadToDos()
+            loadToDos()
         }
     }
-    var todosArray = [ToDo]()
+    var todoList: Results<ToDo>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,30 +37,35 @@ class ToDoListVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todosArray.count
+        return todoList?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let todo = todosArray[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
-        cell.textLabel?.text = todo.title
-        cell.accessoryType = todo.done ? .checkmark : .none
+        if let todo = todoList?[indexPath.row] {
+            cell.textLabel?.text = todo.title
+            cell.accessoryType = todo.done ? .checkmark : .none
+        } else {
+            cell.textLabel?.text = "No ToDos Added Yet"
+            cell.accessoryType = .none
+        }
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let todo = todosArray[indexPath.row]
-        todo.done = !todo.done
-//        let index = IndexPath(row: indexPath.row, section: 0)
-//        todosArray.remove(at: indexPath.row)
-//        context.delete(todo)
-//        tableView.deleteRows(at: [index], with: .automatic)
-        
-//        saveToDos()
+        if let todo = todoList?[indexPath.row] {
+            do {
+                try realm.write {
+                    todo.done = !todo.done
+                }
+            } catch {
+                print("Error updating ToDo: \(error)")
+            }
+        }
         
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
@@ -68,72 +74,60 @@ class ToDoListVC: UITableViewController {
     //MARK: - Add New Items
     
     @objc func addToDo() {
-//        let ac = UIAlertController(title: "Add ToDo", message: nil, preferredStyle: .alert)
-//        ac.addTextField()
-//
-//        let submitAction = UIAlertAction(title: "Submit", style: .default) {
-//            [weak self, weak ac] _ in
-//
-//            guard let todo = ac?.textFields?[0].text else { return }
-//
-//            self?.submit(todo)
-//        }
-//
-//        ac.addAction(submitAction)
-//        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-//
-//        present(ac, animated: true)
+        let ac = UIAlertController(title: "Add ToDo", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+
+        let submitAction = UIAlertAction(title: "Submit", style: .default) {
+            [weak self, weak ac] _ in
+
+            guard let todo = ac?.textFields?[0].text else { return }
+
+            self?.submit(todo)
+        }
+
+        ac.addAction(submitAction)
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        present(ac, animated: true)
     }
     
     //MARK: - Model Manipulation Methods
     
-//    func submit(_ todo: String) {
-//        if todo.count < 3 {
-//            return
-//        }
-//
-//        let newTodo = ToDo()
-//        newTodo.title = todo
-//        newTodo.done = false
-//        newTodo.parentCategory =
-//
-//        todosArray.insert(newTodo, at: todosArray.count)
-////        todosArray.append(todo)
-//        saveToDos()
-//
-//        let indexPath = IndexPath(row: todosArray.count - 1, section: 0)
-//
-//        tableView.insertRows(at: [indexPath], with: .automatic)
-//
-//    }
+    func submit(_ todo: String) {
+        if todo.count < 3 {
+            return
+        }
+        
+        let newTodo = ToDo()
+        newTodo.title = todo
+
+        saveToDo(newTodo)
+        
+        if let todos = todoList {
+            let indexPath = IndexPath(row: todos.count - 1, section: 0)
+
+            tableView.insertRows(at: [indexPath], with: .automatic)
+        }
+    }
     
-//    func saveToDos() {
-//
-//        do {
-//            try context.save()
-//        } catch {
-//            print("Error saving context: \(error)")
-//        }
-//    }
+    func saveToDo(_ todo: ToDo) {
+        
+        if let currentCategory = selectedCategory {
+            do {
+                try realm.write {
+                    currentCategory.todos.append(todo)
+                }
+            } catch {
+                print("Error saving ToDo: \(error)")
+            }
+        }
+    }
     
-//    func loadToDos(with request: NSFetchRequest<ToDo> = ToDo.fetchRequest(), for predicate: NSPredicate? = nil) {
-//
-//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-//
-//        if let additionalPredicate = predicate {
-//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-//        } else {
-//            request.predicate = categoryPredicate
-//        }
-//
-//        do {
-//            todosArray = try context.fetch(request)
-//        } catch {
-//            print("Error fetching data from context: \(error)")
-//        }
-//
-//        tableView.reloadData()
-//    }
+    func loadToDos() {
+        todoList = selectedCategory?.todos.sorted(byKeyPath: "title")
+
+        tableView.reloadData()
+    }
 
 }
 
