@@ -61,6 +61,7 @@ class ToDoListVC: UITableViewController {
             do {
                 try realm.write {
                     todo.done = !todo.done
+//                    realm.delete(todo)
                 }
             } catch {
                 print("Error updating ToDo: \(error)")
@@ -124,7 +125,7 @@ class ToDoListVC: UITableViewController {
     }
     
     func loadToDos() {
-        todoList = selectedCategory?.todos.sorted(byKeyPath: "title")
+        todoList = selectedCategory?.todos.sorted(byKeyPath: "title", ascending: false)
 
         tableView.reloadData()
     }
