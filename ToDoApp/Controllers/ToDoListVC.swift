@@ -68,6 +68,9 @@ class ToDoListVC: UITableViewController {
             }
         }
         
+//        let index = IndexPath(row: indexPath.row, section: 0)
+//        tableView.deleteRows(at: [index], with: .automatic)
+        
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -125,7 +128,7 @@ class ToDoListVC: UITableViewController {
     }
     
     func loadToDos() {
-        todoList = selectedCategory?.todos.sorted(byKeyPath: "title", ascending: false)
+        todoList = selectedCategory?.todos.sorted(byKeyPath: "dateCreated", ascending: true)
 
         tableView.reloadData()
     }
@@ -134,26 +137,24 @@ class ToDoListVC: UITableViewController {
 
 //MARK: - UISearchBarDelegate
 
-//extension ToDoListVC: UISearchBarDelegate {
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//
-//        if searchBar.text!.isEmpty {
-//            loadToDos()
-//
-//            DispatchQueue.main.async {
-//                [weak searchBar] in
-//
-//                searchBar?.resignFirstResponder()
-//            }
-//
-//            return
-//        }
-//
-//        let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
-//        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//
-//        loadToDos(with: request, for: predicate)
-//    }
-//}
+extension ToDoListVC: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        if searchBar.text!.isEmpty {
+            
+            loadToDos()
+
+            DispatchQueue.main.async {
+                [weak searchBar] in
+
+                searchBar?.resignFirstResponder()
+            }
+
+            return
+        }
+        
+        todoList = todoList?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        
+        tableView.reloadData()
+    }
+}
