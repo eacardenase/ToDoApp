@@ -6,11 +6,11 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryVC: UITableViewController {
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
     var categoriesArray: [Category] = []
 
     override func viewDidLoad() {
@@ -82,12 +82,12 @@ class CategoryVC: UITableViewController {
             return
         }
         
-        let newCategory = Category(context: context)
+        let newCategory = Category()
         newCategory.name = category
         
         categoriesArray.insert(newCategory, at: categoriesArray.count)
         
-        saveCategories()
+        saveCategory(newCategory)
         
         let indexPath = IndexPath(row: categoriesArray.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
@@ -95,22 +95,18 @@ class CategoryVC: UITableViewController {
     
     //MARK: - Data Manipulation Methods
     
-    func saveCategories() {
+    func saveCategory(_ category: Category) {
         do {
-            try context.save()
+            try realm.write {
+                realm.add(category)
+            }
         } catch {
             print("Error saving context: \(error)")
         }
     }
     
-    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
-        do {
-            categoriesArray = try context.fetch(request)
-        } catch {
-            print("Error fetching data from context: \(error)")
-        }
+    func loadCategories() {
         
-        tableView.reloadData()
     }
 
 }

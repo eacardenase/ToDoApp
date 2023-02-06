@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		203BA02F29914AA800D66913 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 203BA02E29914AA800D66913 /* Realm */; };
 		203BA03129914AA800D66913 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 203BA03029914AA800D66913 /* RealmSwift */; };
-		203BA035299153D700D66913 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203BA034299153D700D66913 /* ToDo.swift */; };
-		203BA037299153DF00D66913 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203BA036299153DF00D66913 /* Category.swift */; };
+		203BA03929915D5000D66913 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203BA03829915D5000D66913 /* Category.swift */; };
+		203BA03B29915D6900D66913 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203BA03A29915D6900D66913 /* ToDo.swift */; };
 		205E232529905A8400C2A30A /* CategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205E232429905A8400C2A30A /* CategoryVC.swift */; };
 		20644C2A298C90E60047EB2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20644C29298C90E60047EB2F /* AppDelegate.swift */; };
 		20644C2C298C90E60047EB2F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20644C2B298C90E60047EB2F /* SceneDelegate.swift */; };
@@ -18,12 +18,11 @@
 		20644C31298C90E60047EB2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20644C2F298C90E60047EB2F /* Main.storyboard */; };
 		20644C36298C90E70047EB2F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20644C35298C90E70047EB2F /* Assets.xcassets */; };
 		20644C39298C90E70047EB2F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20644C37298C90E70047EB2F /* LaunchScreen.storyboard */; };
-		2093CB22298F389A002D1233 /* ToDoModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2093CB20298F389A002D1233 /* ToDoModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		203BA034299153D700D66913 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
-		203BA036299153DF00D66913 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		203BA03829915D5000D66913 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		203BA03A29915D6900D66913 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		205E232429905A8400C2A30A /* CategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryVC.swift; sourceTree = "<group>"; };
 		20644C26298C90E60047EB2F /* ToDoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		20644C29298C90E60047EB2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -34,7 +33,6 @@
 		20644C38298C90E70047EB2F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		20644C3A298C90E70047EB2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		20644C43298C92840047EB2F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		2093CB21298F389A002D1233 /* ToDoModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ToDoModel.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,9 +100,8 @@
 		20644C42298C91160047EB2F /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				2093CB20298F389A002D1233 /* ToDoModel.xcdatamodeld */,
-				203BA034299153D700D66913 /* ToDo.swift */,
-				203BA036299153DF00D66913 /* Category.swift */,
+				203BA03829915D5000D66913 /* Category.swift */,
+				203BA03A29915D6900D66913 /* ToDo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -189,11 +186,10 @@
 			files = (
 				205E232529905A8400C2A30A /* CategoryVC.swift in Sources */,
 				20644C2E298C90E60047EB2F /* ToDoListVC.swift in Sources */,
-				2093CB22298F389A002D1233 /* ToDoModel.xcdatamodeld in Sources */,
-				203BA035299153D700D66913 /* ToDo.swift in Sources */,
 				20644C2A298C90E60047EB2F /* AppDelegate.swift in Sources */,
+				203BA03B29915D6900D66913 /* ToDo.swift in Sources */,
 				20644C2C298C90E60047EB2F /* SceneDelegate.swift in Sources */,
-				203BA037299153DF00D66913 /* Category.swift in Sources */,
+				203BA03929915D5000D66913 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,19 +431,6 @@
 			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		2093CB20298F389A002D1233 /* ToDoModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				2093CB21298F389A002D1233 /* ToDoModel.xcdatamodel */,
-			);
-			currentVersion = 2093CB21298F389A002D1233 /* ToDoModel.xcdatamodel */;
-			path = ToDoModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 20644C1E298C90E60047EB2F /* Project object */;
 }
