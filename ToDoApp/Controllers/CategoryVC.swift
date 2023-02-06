@@ -19,6 +19,15 @@ class CategoryVC: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToDoCategory))
         navigationItem.rightBarButtonItem?.tintColor = .white
         
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .systemCyan
+        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+        navigationItem.standardAppearance = navigationBarAppearance
+        navigationItem.compactAppearance = navigationBarAppearance
+        navigationItem.scrollEdgeAppearance = navigationBarAppearance
+        
         loadCategories()
     }
 
@@ -36,9 +45,19 @@ class CategoryVC: UITableViewController {
         return cell
     }
     
+    //MARK: - TableView Delegate Methods
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(categoriesArray[indexPath.row])
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "ToDoList") as? ToDoListVC {
+            let selectedCategory = categoriesArray[indexPath.row]
+ 
+            vc.selectedCategory = selectedCategory
+            
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
+    
+    //MARK: - Adding new categories
 
     @objc func addToDoCategory() {
         let ac = UIAlertController(title: "Add Category", message: nil, preferredStyle: .alert)
@@ -71,6 +90,8 @@ class CategoryVC: UITableViewController {
         let indexPath = IndexPath(row: categoriesArray.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
     }
+    
+    //MARK: - Data Manipulation Methods
     
     func saveCategories() {
         do {

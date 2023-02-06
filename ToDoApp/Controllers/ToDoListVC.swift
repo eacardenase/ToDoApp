@@ -11,19 +11,29 @@ import CoreData
 class ToDoListVC: UITableViewController {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var selectedCategory: Category? {
+        didSet {
+            loadToDos()
+        }
+    }
     var todosArray = [ToDo]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadToDos()
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToDo))
         navigationItem.rightBarButtonItem?.tintColor = .white
         
-        let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        print(dataFilePath)
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .systemCyan
+        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+        navigationItem.standardAppearance = navigationBarAppearance
+        navigationItem.compactAppearance = navigationBarAppearance
+        navigationItem.scrollEdgeAppearance = navigationBarAppearance
         
+        navigationController?.navigationBar.tintColor = UIColor.white
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -84,6 +94,7 @@ class ToDoListVC: UITableViewController {
         let newTodo = ToDo(context: context)
         newTodo.title = todo
         newTodo.done = false
+        newTodo.parentCategory = selectedCategory
         
         todosArray.insert(newTodo, at: todosArray.count)
 //        todosArray.append(todo)
@@ -104,7 +115,15 @@ class ToDoListVC: UITableViewController {
         }
     }
     
-    func loadToDos(with request: NSFetchRequest<ToDo> = ToDo.fetchRequest()) {
+    func loadToDos(with request: NSFetchRequest<ToDo> = ToDo.fetchRequest(), for predicate: NSPredicate? = nil) {
+        
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
         
         do {
             todosArray = try context.fetch(request)
@@ -135,10 +154,10 @@ extension ToDoListVC: UISearchBarDelegate {
         }
         
         let request: NSFetchRequest<ToDo> = ToDo.fetchRequest()
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        loadToDos(with: request)
+        loadToDos(with: request, for: predicate)
     }
 }
