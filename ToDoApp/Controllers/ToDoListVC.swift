@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class ToDoListVC: UITableViewController {
+class ToDoListVC: SwipeTableVC {
     
     let realm = try! Realm()
     var selectedCategory: Category? {
@@ -33,7 +33,7 @@ class ToDoListVC: UITableViewController {
         navigationItem.compactAppearance = navigationBarAppearance
         navigationItem.scrollEdgeAppearance = navigationBarAppearance
         
-        navigationController?.navigationBar.tintColor = UIColor.white
+        tableView.rowHeight = 80.0
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -42,7 +42,7 @@ class ToDoListVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let todo = todoList?[indexPath.row] {
             cell.textLabel?.text = todo.title
@@ -61,15 +61,11 @@ class ToDoListVC: UITableViewController {
             do {
                 try realm.write {
                     todo.done = !todo.done
-//                    realm.delete(todo)
                 }
             } catch {
                 print("Error updating ToDo: \(error)")
             }
         }
-        
-//        let index = IndexPath(row: indexPath.row, section: 0)
-//        tableView.deleteRows(at: [index], with: .automatic)
         
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
@@ -131,6 +127,20 @@ class ToDoListVC: UITableViewController {
         todoList = selectedCategory?.todos.sorted(byKeyPath: "dateCreated", ascending: true)
 
         tableView.reloadData()
+    }
+    
+    //MARK: - Delete Data From Swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let todo = self.todoList?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(todo)
+                }
+            } catch {
+                print("Error deleting category: \(error)")
+            }
+        }
     }
 
 }

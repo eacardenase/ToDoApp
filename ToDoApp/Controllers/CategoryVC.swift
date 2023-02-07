@@ -7,12 +7,11 @@
 
 import UIKit
 import RealmSwift
-import SwipeCellKit
 
-class CategoryVC: UITableViewController {
+class CategoryVC: SwipeTableVC {
     
     let realm = try! Realm()
-    var categoriesArray: Results<Category>?
+    var categoriesList: Results<Category>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,15 +34,14 @@ class CategoryVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoriesArray?.count ?? 1
+        return categoriesList?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let category = categoriesArray?[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        let category = categoriesList?[indexPath.row]
         
-        cell.delegate = self
         cell.textLabel?.text = category?.name ?? "No Categories Added Yet"
         
         return cell
@@ -53,7 +51,7 @@ class CategoryVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "ToDoList") as? ToDoListVC {
-            let selectedCategory = categoriesArray?[indexPath.row]
+            let selectedCategory = categoriesList?[indexPath.row]
  
             vc.selectedCategory = selectedCategory
             
@@ -91,7 +89,7 @@ class CategoryVC: UITableViewController {
         
         saveCategory(newCategory)
         
-        let indexPath = IndexPath(row: categoriesArray!.count - 1, section: 0)
+        let indexPath = IndexPath(row: categoriesList!.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
     }
     
@@ -108,41 +106,23 @@ class CategoryVC: UITableViewController {
     }
     
     func loadCategories() {
-        categoriesArray = realm.objects(Category.self)
+        categoriesList = realm.objects(Category.self)
         
         tableView.reloadData()
     }
-
-}
-
-//MARK: - SwipeTableViewDelegate
-
-extension CategoryVC: SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
-
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            
-            if let category = self.categoriesArray?[indexPath.row] {
-                do {
-                    try self.realm.write {
-                        self.realm.delete(category)
-                    }
-                } catch {
-                    print("Error updating ToDo: \(error)")
+    
+    //MARK: - Delete Data From Swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let category = self.categoriesList?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(category)
                 }
+            } catch {
+                print("Error deleting category: \(error)")
             }
-            
-            let index = IndexPath(row: indexPath.row, section: 0)
-            tableView.deleteRows(at: [index], with: .automatic)
-            
-            tableView.deselectRow(at: indexPath, animated: true)
         }
-
-        deleteAction.image = UIImage(named: "delete")
-
-        return [deleteAction]
     }
-    
-    
+
 }
