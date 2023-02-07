@@ -29,8 +29,6 @@ class CategoryVC: SwipeTableVC {
         navigationItem.scrollEdgeAppearance = navigationBarAppearance
         
         loadCategories()
-        
-        tableView.rowHeight = 80.0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
