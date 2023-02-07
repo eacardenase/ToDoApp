@@ -44,6 +44,7 @@ class CategoryVC: SwipeTableVC {
         
         cell.textLabel?.text = category?.name ?? "No Categories Added Yet"
         cell.backgroundColor = UIColor(hexString: backgroundColor)
+        cell.textLabel?.textColor = ContrastColorOf(UIColor(hexString: backgroundColor)!, returnFlat: true)
         
         return cell
     }

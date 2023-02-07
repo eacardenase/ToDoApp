@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class ToDoListVC: SwipeTableVC {
     
@@ -43,8 +44,15 @@ class ToDoListVC: SwipeTableVC {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let todo = todoList?[indexPath.row] {
+            let darkenPercentage = CGFloat(indexPath.row) / CGFloat(todoList!.count)
+            if let backgroundColor = UIColor(hexString: selectedCategory!.backgroundColor)?.darken(byPercentage: darkenPercentage) {
+                cell.backgroundColor = backgroundColor
+                cell.textLabel?.textColor = ContrastColorOf(backgroundColor, returnFlat: true)
+            }
+            
             cell.textLabel?.text = todo.title
             cell.accessoryType = todo.done ? .checkmark : .none
+            
         } else {
             cell.textLabel?.text = "No ToDos Added Yet"
             cell.accessoryType = .none
