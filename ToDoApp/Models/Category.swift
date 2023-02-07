@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import UIKit
 import RealmSwift
 
 class Category: Object {
     @Persisted var name: String = ""
+    @Persisted var backgroundColor: String = ""
     @Persisted var todos = List<ToDo>()
 }
