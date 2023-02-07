@@ -40,7 +40,7 @@ class CategoryVC: SwipeTableVC {
         
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let category = categoriesList?[indexPath.row]
-        let backgroundColor = category?.backgroundColor ?? "#000000"
+        let backgroundColor = category?.backgroundColor ?? "#1D9BF6"
         
         cell.textLabel?.text = category?.name ?? "No Categories Added Yet"
         cell.backgroundColor = UIColor(hexString: backgroundColor)
