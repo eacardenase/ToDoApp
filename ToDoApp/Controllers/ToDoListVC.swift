@@ -11,6 +11,7 @@ import ChameleonFramework
 
 class ToDoListVC: SwipeTableVC {
     
+    @IBOutlet var searchBar: UISearchBar!
     let realm = try! Realm()
     var selectedCategory: Category? {
         didSet {
@@ -23,13 +24,26 @@ class ToDoListVC: SwipeTableVC {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToDo))
-        navigationItem.rightBarButtonItem?.tintColor = .white
         
+        let backButtonAppearance = UIBarButtonItemAppearance(style: .plain)
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithDefaultBackground()
-        navigationBarAppearance.backgroundColor = .systemCyan
-        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-
+        
+        
+        if let hexColor = selectedCategory?.backgroundColor {
+            if let categoryColor = UIColor(hexString: hexColor), let categoryName = selectedCategory?.name {
+                
+                title = categoryName
+                searchBar.barTintColor = categoryColor
+                navigationBarAppearance.backgroundColor = categoryColor
+                navigationBarAppearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(categoryColor, returnFlat: true)]
+                navigationItem.rightBarButtonItem?.tintColor = ContrastColorOf(categoryColor, returnFlat: true)
+                
+                backButtonAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(categoryColor, returnFlat: true)]
+                navigationBarAppearance.backButtonAppearance = backButtonAppearance
+            }
+        }
+        
         navigationItem.standardAppearance = navigationBarAppearance
         navigationItem.compactAppearance = navigationBarAppearance
         navigationItem.scrollEdgeAppearance = navigationBarAppearance
